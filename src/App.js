@@ -1,25 +1,22 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import SpeedPicker from './components/SpeedPicker'
 import './App.css';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <div className="title">
+          Awesome React Metronome
+        </div>
+        <div className="main">
+        <SpeedPicker default="120" />
+        <ul>
+          <li>choose bpm</li>
+          <li>play sound every beat</li>
+          <li>choose accent</li>
+        </ul>
+        </div>
       </div>
     );
   }
