@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Button from './common/Button'
-import sound from '../assets/tink.wav'
+import Input from './common/Input'
+import beat from '../assets/tink.wav'
 
-// set playing and interval when component mounts
 class SpeedPicker extends Component {
   constructor(props) {
     super(props);
@@ -10,24 +10,25 @@ class SpeedPicker extends Component {
       playing: false,
       speed: 40
     }
-    this.beat = new Audio('../assets/tink.wav');
   }
 
   render() {
     return (
       <div>
         <div>
-          <input type="range" name="slider" min="40" max="300" defaultValue={this.props.default} onChange={this.updateSpeed}></input>
-          <label htmlFor="slider">{this.state.speed}</label>
+          <input type="range" name="slider" min="40" max="300" value={this.state.speed} onChange={this.updateSpeed}></input>
+          <Input type="number" value={this.state.speed} onChange={this.updateSpeed} number={this.state.speed}></Input>
         </div>
         <div>
           <Button text="Start" onClick={this.handlePlayClick} />
-          </div>
+        </div>
+        <audio ref="beat">
+          <source src={beat} type="audio/wav"></source>
+          <p>Browser doesn't support audio!</p>
+        </audio>
       </div>
     );
   }
-
-  //<audio ref="beat" src="../assets/tink.wav"></audio>
 
   //class field syntax **experimental**
   updateSpeed = (e) => {
@@ -35,6 +36,10 @@ class SpeedPicker extends Component {
     this.setState(state => ({
       speed: e.target.value
     }));
+
+    if (this.state.playing) {
+      this.stopPlaying();
+    }
   }
 
   handlePlayClick = () => {
@@ -42,16 +47,9 @@ class SpeedPicker extends Component {
   }
 
   startPlay = () => {
+      this.refs.beat.play();
     const id = window.setInterval(() => {
-      const promise = this.beat.play();
-      promise.then(() => {
-        console.log("playback worked");
-      }, (err) => {
-        console.log(err);
-      }).catch(err => {
-        console.log("ERROR");
-        console.log(err);
-      });
+      this.refs.beat.play();
     }, 1 / (this.state.speed / 60) * 1000);
 
     this.setState(state => ({
