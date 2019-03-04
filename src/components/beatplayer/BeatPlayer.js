@@ -1,30 +1,37 @@
 import React, { Component } from 'react'
 import Button from '../common/Button'
 import beat from '../../assets/tink.wav';
-import accent from '../../assets/tink.wav'
+import accent from '../../assets/accent.wav'
 
 export default class BeatPlayer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      speed: props.speed,
-      beats: props.beats,
-      accents: props.accents,
       playing: false,
     }
   }
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.speed !== this.props.speed && prevState.playing) {
+      this.stopPlaying();
+      this.startPlay();
+    }
+  }
+
+  componentWillUnmount = () => {
+    window.clearInterval(this.state.intervalId);
+  }
+
+  // maybe we should build a 'bar' array to hold the sounds, and just loop that
   startPlay = () => {
-    this.state.accents.includes(1) ? this.refs.accent.play() :
+    this.props.accents.includes(1) ? this.refs.accent.play() :
       this.refs.beat.play();
+    let currentBeat = 2;
     const id = window.setInterval(() => {
-      let currentBeat = 2;
-      this.state.accents.includes(currentBeat) ? this.refs.accent.play() : 
-        this.refs.accent.play();
-      this.state.currentBeat === this.state.beats ? currentBeat = 0 :
-        currentBeat++;
       console.log(currentBeat);
-    }, 1 / (this.state.speed / 60) * 1000);
+      this.props.accents.includes(currentBeat) ? this.refs.accent.play() : this.refs.beat.play();
+      currentBeat === this.props.beats ? currentBeat = 1 : currentBeat++;
+    }, 1 / (this.props.speed / 60) * 1000);
 
     this.setState(state => ({
       playing: true,

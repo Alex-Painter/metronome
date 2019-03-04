@@ -11,7 +11,11 @@ export default class Metronome extends Component {
       accents: [1],
     }
   }
- 
+
+  onSpeedChange = (e) => {
+    this.setState({speed: e})
+  }
+
   render() {
     return (
       <div>
