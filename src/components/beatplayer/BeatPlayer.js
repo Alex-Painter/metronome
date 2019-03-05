@@ -28,10 +28,15 @@ export default class BeatPlayer extends Component {
       this.refs.beat.play();
     let currentBeat = 2;
     const id = window.setInterval(() => {
-      console.log(currentBeat);
-      this.props.accents.includes(currentBeat) ? this.refs.accent.play() : this.refs.beat.play();
-      currentBeat === this.props.beats ? currentBeat = 1 : currentBeat++;
-    }, 1 / (this.props.speed / 60) * 1000);
+      if(this.props.accents.includes(currentBeat)) {
+        this.refs.accent.currentTime = 0;
+        this.refs.accent.play();
+      } else {
+        this.refs.beat.currentTime = 0;
+        this.refs.beat.play();
+      }
+      currentBeat = currentBeat % this.props.beats + 1;
+    }, (60 / this.props.speed) * 1000);
 
     this.setState(state => ({
       playing: true,
@@ -55,11 +60,11 @@ export default class BeatPlayer extends Component {
     return (
       <div>
         <audio ref="beat">
-          <source src={beat} type="audio/wav"></source>
+          <source src={beat} type="audio/wav" loop={false}></source>
           <p>Browser doesn't support audio!</p>
         </audio>
         <audio ref="accent">
-          <source src={accent} type="audio/wav"></source>
+          <source src={accent} type="audio/mp3" loop={false} autoPlay={false}></source>
         </audio>
         <div>
           <Button text="Start" onClick={this.handlePlayClick} />
