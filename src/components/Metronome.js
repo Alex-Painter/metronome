@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import SpeedPicker from './speedpicker/SpeedPicker';
 import BeatPlayer from './beatplayer/BeatPlayer';
+import Osc from '../components/Oscillator'
 
 export default class Metronome extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ export default class Metronome extends Component {
           <BeatPlayer speed={this.state.speed} beats={this.state.beats}
             accents={this.state.accents}/>
         </div>
+        <Osc type="sawtooth" freq={440} />
       </div>
     )
   }
